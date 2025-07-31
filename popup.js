@@ -44,18 +44,17 @@ function secondsToString(seconds,compressed=false){
 };
 var allKeys, timeSpent, totalTimeSpent,sortedTimeList,topCount,topDataSet,topLabels,dateChart;
 var color = [
-  "rgba(128, 0, 128, 1)",     // Purple
-  "rgb(102, 0, 204)",         // Deep Purple
-  "rgb(76, 0, 153)",          // Indigo
-  "rgb(51, 51, 255)",         // Blue
-  "rgb(0, 102, 255)",         // Medium Blue
-  "rgb(0, 153, 255)",         // Sky Blue
-  "rgb(0, 204, 255)",         // Light Cyan
-  "rgb(51, 255, 255)",        // Cyan
-  "rgb(102, 255, 255)",       // Pale Cyan
-  "rgb(153, 255, 255)"        // Very Light Cyan
+  "rgb(84, 105, 255)",   // Blue
+  "rgb(135, 85, 255)",   // Lavender/Purple
+  "rgb(192, 85, 255)",   // Pinkish Purple
+  "rgb(255, 103, 179)",  // Hot Pink
+  "rgb(255, 120, 120)",  // Coral Red
+  "rgb(255, 153, 102)",  // Orange
+  "rgb(255, 187, 85)",   // Light Orange
+  "rgb(255, 221, 102)",  // Yellow
+  "rgb(204, 255, 102)",  // Light Lime
+  "rgb(178, 255, 102)"   // Lime Green
 ];
-
 totalTimeSpent = 0;
 var today = getDateString(new Date())
 chrome.storage.local.get(today,function(storedItems){
