@@ -1,0 +1,153 @@
+html, body {
+    width: 500px;
+    height: 570px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+  }
+
+#todayTab, #dailyTab, #weekTab {
+    background: #f5faff;
+    color: #1976d2;
+    border-radius: 0;
+    margin: 0;
+    font-weight: 500;
+    border: 1px solid #b3d1f7;
+    box-shadow: none;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    padding: 10px 0;
+    flex: 1 1 0;
+    text-align: center;
+}
+
+.nav-pills {
+    display: flex;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+.nav-pills .nav-item {
+    flex: 1 1 0;
+    margin: 0;
+}
+#todayTab:hover, #dailyTab:hover, #weekTab:hover {
+    background: #e3f0ff;
+    color: #1565c0;
+    border-color: #1976d2;
+}
+.nav-link.active {
+    background: #e3f0ff !important;
+    color: #1565c0 !important;
+    border-color: #1976d2 !important;
+}
+
+
+.card .card-body span#totalTimeToday,
+.card .card-body span#totalTimeThatDay {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #1976d2;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    display: block;
+}
+.card .card-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0.5rem 0;
+}
+
+#detailBtn,#detailBtn2{
+    background-color: #719fb0;
+    color:#212529;
+    transition: 1s;
+}
+
+#detailBtn:hover,#detailBtn2:hover{
+    background-color: #0d2e3a;
+    color:white;
+}
+
+.card-header{
+    background-color: #719fb0 ;
+}
+
+#dateSubmit{
+    background-color: #719fb0;
+    color:#212529;
+    transition: 1s;
+}
+
+#dateSubmit:hover{
+    background-color: #0d2e3a;
+    color:white;
+}
+
+#todayPanel .container.text-center .row,
+#dailyReport .container .row {
+    justify-content: center;
+}
+
+
+#todayPanel .container.text-center .col,
+#dailyReport .container .col {
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 200px; 
+}
+
+
+#webListDiv, #dailyTableContainer {
+    width: 100%;
+}
+
+
+.table thead th, 
+.table tbody td {
+    text-align: center;
+}
+
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+
+#dailyReport .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#dailyReport .row.mt-2 {
+    justify-content: center;
+    width: 100%;
+}
+
+
+#dateValue {
+    width: auto;
+}
+#dailyReport #dateValue {
+    width: 250px; 
+}
+
+#dailyStatsContainer .row {
+    justify-content: center;
+}
+
+/* Remove yellow and red backgrounds from weekly average and max cards */
+.card-header.bg-warning {
+    background-color: #0d9dd2 !important;
+    color: #fff !important;
+}
+
+.card-header.bg-danger {
+    background-color: #3c39e6 !important;
+    color: #fff !important;
+}
