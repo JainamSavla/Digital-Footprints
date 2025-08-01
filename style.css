@@ -211,3 +211,180 @@ canvas {
     background-color: #c7d2fe;
     border-radius: 3px;
 }
+
+.navbar {
+    margin-bottom: 10px;
+}
+
+/* --- Improved Site Blocker/App Limits Styling --- */
+#app {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-width: 320px;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+}
+
+#header-container {
+    background: linear-gradient(90deg, #174b42 60%, #2d7a6b 100%);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0 1rem 0;
+    border-radius: 12px 12px 0 0;
+    box-shadow: 0 2px 8px rgba(23, 75, 66, 0.08);
+}
+
+section.header h1 {
+    font-size: 2.2em;
+    color: #fff;
+    font-family: 'Noto Serif', serif;
+    letter-spacing: 1px;
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(23, 75, 66, 0.15);
+}
+
+#content-container {
+    width: 100%;
+    padding: 1.5rem 0 0.5rem 0;
+    background: #f7fafc;
+    border-radius: 0 0 12px 12px;
+    box-shadow: 0 2px 12px rgba(23, 75, 66, 0.08);
+}
+
+section.add-block, section.remove-block {
+    margin: 1.5rem 0;
+    padding: 1.2rem 1.5rem;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(23, 75, 66, 0.07);
+    width: 95%;
+    max-width: 400px;
+}
+
+section.add-block h2, section.remove-block h2 {
+    font-size: 1.3em;
+    color: #174b42;
+    font-family: 'Noto Serif', serif;
+    margin-bottom: 0.7rem;
+    letter-spacing: 0.5px;
+}
+
+.add-block .main {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin: 0.5rem 0 0 0;
+}
+
+input#websiteInput {
+    padding-left: 10px;
+    height: 36px;
+    margin: 0;
+    font-size: 1em;
+    border-radius: 6px;
+    border: 1px solid #b3d1f7;
+    background: #f5faff;
+    outline: none;
+    width: 70%;
+    transition: border 0.2s;
+}
+
+input#websiteInput:focus {
+    border-color: #174b42;
+    background: #e3f0ff;
+}
+
+button.block {
+    background: linear-gradient(90deg, #e30202 70%, #ff6b6b 100%);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1em;
+    border-radius: 6px;
+    border: none;
+    padding: 0 1.2em;
+    height: 36px;
+    box-shadow: 0 2px 8px rgba(227, 2, 2, 0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+button.block:hover {
+    background: linear-gradient(90deg, #9c0101 70%, #e30202 100%);
+    box-shadow: 0 4px 12px rgba(227, 2, 2, 0.15);
+}
+
+section.remove-block .main {
+    margin-top: 0.5rem;
+    min-height: 40px;
+}
+
+.websiteDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f5faff;
+    border-radius: 6px;
+    margin: 0.5rem 0;
+    padding: 0.5rem 0.8rem;
+    box-shadow: 0 1px 4px rgba(23, 75, 66, 0.04);
+    transition: background 0.2s;
+    width: 100%;
+    max-width: 350px;
+}
+
+.websiteDiv:hover {
+    background: #e3f0ff;
+}
+
+.websiteDivText {
+    font-size: 1em;
+    color: #174b42;
+    font-family: 'Noto Serif', serif;
+    font-weight: 500;
+    padding: 0;
+    border: none;
+    background: none;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+button.delete {
+    background: #ff6b6b;
+    color: #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.12);
+    transition: background 0.2s, box-shadow 0.2s;
+    margin-left: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.delete:hover {
+    background: #e30202;
+    box-shadow: 0 4px 12px rgba(227, 2, 2, 0.18);
+    color: #fff;
+}
+
+.nothingBlocked {
+    color: #174b42;
+    font-size: 1.1em;
+    text-align: center;
+    margin-top: 1.5rem;
+    opacity: 0.8;
+    font-family: 'Noto Serif', serif;
+    letter-spacing: 0.5px;
+}
+
+/* --- End Improved Site Blocker Styling --- */

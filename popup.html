@@ -7,9 +7,73 @@
         <script src="jquery-3.5.1.min.js"></script>
         <script src="bootstrap-4.5.3-dist\js\bootstrap.min.js"></script>
         <script src="Chart.min.js"></script>
-
+        <!-- Add Font Awesome for the delete icon -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     </head>
     <body style="min-width: 400px;min-height: 350px;">
+        <!-- Navbar Start -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+          <a class="navbar-brand font-weight-bold" href="#">Digital Footprints</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="#" id="dashboardNav">Dashboard <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#" id="appLimitsNav">Website Limits</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        <!-- Navbar End -->
+
+        <!-- App Limits UI (hidden by default) -->
+        <div id="appLimitsContainer" style="display:none;">
+          <div id="app">
+            <div id="header-container">
+              <section class="header">
+                <h1>Website Blocker</h1>
+              </section>
+            </div>
+            <div id="content-container">
+              <section class="add-block">
+                <h2>Add to Block List</h2>
+                <div class="main">
+                  <input type="text" id="websiteInput"><button class="block" id="blockButton">Block</button>
+                </div>
+              </section>
+              <section class="remove-block">
+                <h2>Blocked Websites</h2>
+                <div class="main">
+                  <div id="blockedWebsitesDiv"></div>
+                </div>
+              </section>
+              <!-- How to use section -->
+              <section class="how-to-blocker mt-3">
+                <h2>How to use Site Blocker</h2>
+                <ul style="text-align:left; font-size:1em; margin:1em 0 0 0; padding-left:1.2em;">
+                  <li>Enter a website domain (e.g. <b>facebook.com</b>) and click <b>Block</b>.</li>
+                  <li>The site will appear in your blocked list below.</li>
+                  <li>To unblock, click the <b>X</b> button next to the site.</li>
+                  <li>Blocked sites will show a "Site Blocked" page when visited.</li>
+                </ul>
+                <div class="mt-2">
+                  <a href="https://github.com/YOUR_GITHUB_REPO" target="_blank" style="color:#174b42; font-weight:600; text-decoration:underline;">
+                    View Source &amp; Instructions on GitHub
+                  </a>
+                </div>
+              </section>
+            </div>
+            <div class="text-center mt-3">
+              <button class="btn btn-secondary btn-sm" id="backToDashboardBtn">Back</button>
+            </div>
+          </div>
+        </div>
+
         <div class="container">
         </div>
         <div class=" small ">

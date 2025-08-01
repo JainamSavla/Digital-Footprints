@@ -129,3 +129,19 @@ function checkFocus(){
     }
   });
 }
+
+// Listen for changes to the blocked websites list
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+  if (changes.blockedWebsitesArray && namespace === 'sync') {
+    console.log('Block list updated:', changes.blockedWebsitesArray.newValue);
+    
+    // Reload any open tabs that might now be blocked
+    chrome.tabs.query({}, function(tabs) {
+      for (let tab of tabs) {
+        if (tab.url && tab.url.startsWith('http')) {
+          chrome.tabs.reload(tab.id);
+        }
+      }
+    });
+  }
+});
