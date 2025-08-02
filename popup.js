@@ -359,6 +359,9 @@ window.onload = function () {
 
 function getWebsiteInput() {
   var websiteInput = document.getElementById("websiteInput").value.trim();
+  var websiteLimitInput = document.getElementById("websiteLimitInput");
+  var timeLimit = websiteLimitInput ? parseInt(websiteLimitInput.value) : 0;
+  
   // If user clicks the -Block- button without entering input -> Alert Error
   if (!websiteInput) {
     alert("Error: please enter a website URL");
@@ -369,28 +372,51 @@ function getWebsiteInput() {
     }
     
     console.log("Attempting to block:", websiteInput);
+    console.log("With time limit (minutes):", timeLimit);
     
-    // Retrieve the blockedWebsitesArray from Chrome browser, or initialize a new one
-    chrome.storage.sync.get("blockedWebsitesArray", function (data) {
+    // Retrieve the blockedWebsitesArray and websiteTimeLimits from Chrome browser
+    chrome.storage.sync.get(["blockedWebsitesArray", "websiteTimeLimits"], function (data) {
       var blockedWebsitesArray = data.blockedWebsitesArray || [];
+      var websiteTimeLimits = data.websiteTimeLimits || {};
+      
       console.log("Current blocked sites:", blockedWebsitesArray);
       
-      // Check if site is already blocked
+      // Check if site is already blocked or has a time limit
       const isInputInArray = blockedWebsitesArray.some(
         (item) => item.toLowerCase() === websiteInput.toLowerCase()
       );
+      const hasTimeLimit = websiteTimeLimits[websiteInput] !== undefined;
       
-      if (isInputInArray) {
-        alert("Error: URL is already blocked");
+      if (isInputInArray || hasTimeLimit) {
+        alert("Error: This URL is already managed by the blocker");
       } else {
-        blockedWebsitesArray.push(websiteInput);
+        // Handle based on time limit value
+        if (!timeLimit || timeLimit <= 0) {
+          // Permanent block - add to blockedWebsitesArray
+          blockedWebsitesArray.push(websiteInput);
+          console.log(`Adding ${websiteInput} to permanent blocks`);
+        } else {
+          // Time limited block - add to websiteTimeLimits
+          websiteTimeLimits[websiteInput] = timeLimit * 60; // Store limit in seconds
+          console.log(`Setting time limit for ${websiteInput}: ${timeLimit} minutes`);
+        }
+        
+        // Save both arrays
         chrome.storage.sync.set(
-          { blockedWebsitesArray: blockedWebsitesArray },
+          { 
+            blockedWebsitesArray: blockedWebsitesArray,
+            websiteTimeLimits: websiteTimeLimits
+          },
           function () {
             console.log("Updated blocked sites:", blockedWebsitesArray);
+            console.log("Updated time limits:", websiteTimeLimits);
+            
             // Update the UI after the storage operation is complete
             updateBlockedWebsitesSection();
             document.getElementById("websiteInput").value = "";
+            if (websiteLimitInput) {
+              websiteLimitInput.value = "";
+            }
             document.getElementById("websiteInput").focus();
           }
         );
@@ -407,70 +433,168 @@ function updateBlockedWebsitesSection() {
   while (blockedWebsitesDiv && blockedWebsitesDiv.firstChild) {
     blockedWebsitesDiv.removeChild(blockedWebsitesDiv.firstChild);
   }
-  // Get the stored array of blocked websites
-  chrome.storage.sync.get("blockedWebsitesArray", function (data) {
+  
+  // Get today's date
+  const today = getDateString(new Date());
+  
+  // Get the stored array of blocked websites and time limits
+  chrome.storage.sync.get(["blockedWebsitesArray", "websiteTimeLimits"], function (data) {
     const blockedWebsitesArray = data.blockedWebsitesArray || [];
-    // Check if the array is empty
-    if (blockedWebsitesArray && blockedWebsitesArray.length > 0) {
-      // If the array is not empty, remove the message that says 'No websites have been blocked' (if it exists)
-      const nothingBlockedDiv = document.querySelector(".nothingBlocked");
-      if (nothingBlockedDiv != null) {
-        blockedWebsitesDiv.removeChild(nothingBlockedDiv);
+    const websiteTimeLimits = data.websiteTimeLimits || {};
+    
+    // Get today's usage data for time-limited sites
+    chrome.storage.local.get(today, function(todayData) {
+      const todayUsage = todayData[today] || {};
+      
+      // Combine both permanent blocks and time-limited sites into one array
+      const allSites = [...new Set([...blockedWebsitesArray, ...Object.keys(websiteTimeLimits)])];
+      
+      // Check if the array is empty
+      if (allSites && allSites.length > 0) {
+        // If the array is not empty, remove the message that says 'No websites have been blocked' (if it exists)
+        const nothingBlockedDiv = document.querySelector(".nothingBlocked");
+        if (nothingBlockedDiv != null) {
+          blockedWebsitesDiv.removeChild(nothingBlockedDiv);
+        }
+        
+        // then iterate through each item in the stored array of Blocked Websites
+        allSites.forEach((website, index) => {
+          // Create a new div for each URL
+          const websiteDiv = document.createElement("div");
+          // Add class (for styling) to websiteDiv block
+          websiteDiv.classList.add("websiteDiv");
+          
+          // Create div for 'website text'
+          const websiteDivText = document.createElement("div");
+          websiteDivText.classList.add("websiteDivText");
+          websiteDivText.textContent = website;
+          
+          // Append the websiteDivText to websiteDiv
+          websiteDiv.appendChild(websiteDivText);
+          
+          // Create actions container for buttons
+          const actionsDiv = document.createElement("div");
+          actionsDiv.classList.add("websiteActions");
+          
+          // Create the unblock button
+          const deleteButton = document.createElement("button");
+          deleteButton.classList.add("delete"); // Add CSS class for styling
+          deleteButton.dataset.website = website; // Use data attribute to store website
+          deleteButton.textContent = "X";
+          deleteButton.addEventListener("click", unblockURL);
+          actionsDiv.appendChild(deleteButton);
+          
+          websiteDiv.appendChild(actionsDiv);
+          
+          // Check if this site has a time limit
+          if (websiteTimeLimits[website]) {
+            // Add time limit information
+            const timeLimit = websiteTimeLimits[website];
+            const timeUsed = todayUsage[website] || 0;
+            const timeRemaining = Math.max(0, timeLimit - timeUsed);
+            
+            // Add reset button for time-limited sites
+            const resetButton = document.createElement("button");
+            resetButton.classList.add("reset-time");
+            resetButton.title = "Reset time usage";
+            resetButton.textContent = "↻";
+            resetButton.dataset.website = website;
+            resetButton.addEventListener("click", resetTimeUsage);
+            actionsDiv.appendChild(resetButton);
+            
+            // Add time info display
+            const timeInfoDiv = document.createElement("div");
+            timeInfoDiv.classList.add("websiteTimeInfo");
+            
+            // Add appropriate styling based on time remaining
+            const percentUsed = Math.min(100, Math.round((timeUsed / timeLimit) * 100));
+            if (percentUsed >= 90) {
+              timeInfoDiv.classList.add("timeCritical");
+            } else if (percentUsed >= 75) {
+              timeInfoDiv.classList.add("timeWarning");
+            }
+            
+            if (timeRemaining <= 0) {
+              timeInfoDiv.innerHTML = `<strong>Time limit reached!</strong> (${secondsToString(timeLimit)})`;
+            } else {
+              timeInfoDiv.textContent = `${secondsToString(timeRemaining)} left of ${secondsToString(timeLimit)}`;
+            }
+            
+            websiteDiv.appendChild(timeInfoDiv);
+          } else {
+            // Permanent block info
+            const blockInfoDiv = document.createElement("div");
+            blockInfoDiv.classList.add("websiteTimeInfo");
+            blockInfoDiv.textContent = "Always blocked";
+            websiteDiv.appendChild(blockInfoDiv);
+          }
+          
+          // Append the websiteDiv to the blockedWebsitesDiv
+          blockedWebsitesDiv.appendChild(websiteDiv);
+        });
+      } else {
+        // If the array is empty, create the message element
+        const nothingBlocked = document.createElement("div");
+        nothingBlocked.textContent = "No websites have been blocked";
+        nothingBlocked.classList.add("nothingBlocked");
+        blockedWebsitesDiv.appendChild(nothingBlocked);
       }
-      // then iterate through each item in the stored array of Blocked Websites
-      blockedWebsitesArray.forEach((website, index) => {
-        // Create a new div for each URL
-        const websiteDiv = document.createElement("div");
-        // Add class (for styling) to websiteDiv block
-        websiteDiv.classList.add("websiteDiv");
-        // Create div for 'website text'
-        const websiteDivText = document.createElement("div");
-        websiteDivText.classList.add("websiteDivText");
-        websiteDivText.textContent = website;
-        // Append the websiteDivText to websiteDiv
-        websiteDiv.appendChild(websiteDivText);
-        // Create the unblock button
-        const deleteButton = document.createElement("button");
-        deleteButton.classList.add("delete"); // Add CSS class for styling
-        // Create an id value for the array item
-        deleteButton.setAttribute("id", index);
-        // Add text instead of relying on Font Awesome
-        deleteButton.textContent = "X";
-        // Add onClick function to each delete button
-        deleteButton.addEventListener("click", unblockURL);
-        // Append the delete button to the websiteDiv
-        websiteDiv.appendChild(deleteButton);
-        // Append the websiteDiv to the blockedWebsitesDiv
-        blockedWebsitesDiv.appendChild(websiteDiv);
-      });
-    } else {
-      // If the array is empty, create the message element
-      const nothingBlocked = document.createElement("div");
-      nothingBlocked.textContent = "No websites have been blocked";
-      nothingBlocked.classList.add("nothingBlocked");
-      blockedWebsitesDiv.appendChild(nothingBlocked);
-    }
+    });
   });
 }
 
 function unblockURL(event) {
-  // Get the index from the button
-  const clickedButtonId = event.target.id;
-  console.log("Unblocking website at index:", clickedButtonId);
+  // Get the website from data attribute or id
+  const website = event.target.dataset.website || blockedWebsitesArray[event.target.id];
+  console.log("Unblocking website:", website);
   
-  // Get the blockedWebsitesArray
-  chrome.storage.sync.get("blockedWebsitesArray", function (data) {
+  if (!website) {
+    console.error("Could not determine website to unblock");
+    return;
+  }
+  
+  // Get the blockedWebsitesArray and websiteTimeLimits
+  chrome.storage.sync.get(["blockedWebsitesArray", "websiteTimeLimits"], function (data) {
     let blockedWebsitesArray = data.blockedWebsitesArray || [];
-    for (let i = 0; i < blockedWebsitesArray.length; i++) {
-      if (clickedButtonId == i) {
-        console.log("Removing:", blockedWebsitesArray[i]);
-        blockedWebsitesArray.splice(i, 1);
-        break; // Exit the loop after removing the element
-      }
+    let websiteTimeLimits = data.websiteTimeLimits || {};
+    
+    // Remove from blockedWebsitesArray if present
+    blockedWebsitesArray = blockedWebsitesArray.filter(site => site !== website);
+    
+    // Remove from websiteTimeLimits if present
+    if (websiteTimeLimits[website]) {
+      delete websiteTimeLimits[website];
     }
+    
     // Save the updated array back to Chrome storage
-    chrome.storage.sync.set({ blockedWebsitesArray: blockedWebsitesArray }, function() {
+    chrome.storage.sync.set({ 
+      blockedWebsitesArray: blockedWebsitesArray,
+      websiteTimeLimits: websiteTimeLimits
+    }, function() {
       console.log("Updated block list:", blockedWebsitesArray);
+      console.log("Updated time limits:", websiteTimeLimits);
+      updateBlockedWebsitesSection();
+    });
+  });
+}
+
+// Reset time usage for a specific website
+function resetTimeUsage(event) {
+  const website = event.target.dataset.website;
+  if (!website) return;
+  
+  const today = getDateString(new Date());
+  console.log(`Resetting time usage for ${website}`);
+  
+  chrome.storage.local.get(today, function(data) {
+    let todayData = data[today] || {};
+    todayData[website] = 0;
+    
+    let update = {};
+    update[today] = todayData;
+    
+    chrome.storage.local.set(update, function() {
+      console.log(`Reset time usage for ${website} completed`);
       updateBlockedWebsitesSection();
     });
   });

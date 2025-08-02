@@ -43,28 +43,16 @@
               <section class="add-block">
                 <h2>Add to Block List</h2>
                 <div class="main">
-                  <input type="text" id="websiteInput"><button class="block" id="blockButton">Block</button>
+                  <input type="text" id="websiteInput" placeholder="Website URL">
+                  <input type="number" id="websiteLimitInput" min="0" placeholder="Limit (min)" class="time-limit-input">
+                  <button class="block" id="blockButton">Block</button>
                 </div>
+                <div class="help-text">Set time limit in minutes (0 = always block)</div>
               </section>
               <section class="remove-block">
                 <h2>Blocked Websites</h2>
                 <div class="main">
                   <div id="blockedWebsitesDiv"></div>
-                </div>
-              </section>
-              <!-- How to use section -->
-              <section class="how-to-blocker mt-3">
-                <h2>How to use Site Blocker</h2>
-                <ul style="text-align:left; font-size:1em; margin:1em 0 0 0; padding-left:1.2em;">
-                  <li>Enter a website domain (e.g. <b>facebook.com</b>) and click <b>Block</b>.</li>
-                  <li>The site will appear in your blocked list below.</li>
-                  <li>To unblock, click the <b>X</b> button next to the site.</li>
-                  <li>Blocked sites will show a "Site Blocked" page when visited.</li>
-                </ul>
-                <div class="mt-2">
-                  <a href="https://github.com/YOUR_GITHUB_REPO" target="_blank" style="color:#174b42; font-weight:600; text-decoration:underline;">
-                    View Source &amp; Instructions on GitHub
-                  </a>
                 </div>
               </section>
             </div>

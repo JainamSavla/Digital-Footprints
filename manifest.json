@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Digital Footprints",
   "version": "1.0.0",
-  "description": "Keeps track of time spent on the Internet",
+  "description": "Keeps track of time spent on the Internet and blocks sites after time limits",
   "icons": {
     "128": "icons/digital-footprint.png"
   },
@@ -19,7 +19,8 @@
   "permissions": [
     "tabs",
     "storage",
-    "scripting"
+    "scripting",
+    "webNavigation"
   ],
   "host_permissions": [
     "<all_urls>"

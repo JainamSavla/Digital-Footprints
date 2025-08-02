@@ -388,3 +388,82 @@ button.delete:hover {
 }
 
 /* --- End Improved Site Blocker Styling --- */
+
+/* Time Limit Feature Styling */
+.time-limit-input {
+  padding-left: 10px;
+  height: 36px;
+  margin: 0 5px;
+  font-size: 0.9em;
+  border-radius: 6px;
+  border: 1px solid #b3d1f7;
+  background: #f5faff;
+  outline: none;
+  width: 90px;
+  transition: border 0.2s;
+}
+
+.time-limit-input:focus {
+  border-color: #174b42;
+  background: #e3f0ff;
+}
+
+.help-text {
+  color: #666;
+  font-size: 0.85em;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.websiteTimeInfo {
+  font-size: 0.8em;
+  color: #1976d2;
+  padding: 2px 5px;
+  background: #e3f0ff;
+  border-radius: 4px;
+  margin-top: 4px;
+  display: block;
+}
+
+.timeWarning {
+  color: #e65100;
+}
+
+.timeCritical {
+  color: #d32f2f;
+  font-weight: bold;
+}
+
+/* Flex container for website block items */
+.websiteDiv {
+  flex-wrap: wrap;
+}
+
+.websiteDivText {
+  flex: 1;
+  min-width: 150px;
+}
+
+.websiteActions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* Reset time button */
+button.reset-time {
+  background: #4caf50;
+  color: white;
+  border-radius: 4px;
+  width: 24px;
+  height: 24px;
+  font-size: 0.8em;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button.reset-time:hover {
+  background: #388e3c;
+}
