@@ -2,8 +2,6 @@
 
 Digital Footprints is a Chrome extension that tracks and visualizes your daily and weekly website usage. It helps you understand your browsing habits by showing how much time you spend on each site.
 <img width="637" height="745" alt="image" src="https://github.com/user-attachments/assets/f4d71868-81d1-4611-acb2-06532a724044" />
-<img width="629" height="710" alt="image" src="https://github.com/user-attachments/assets/7067ceed-7c4b-49a4-a057-a830f4078335" />
-
 
 ## Features
 git push
